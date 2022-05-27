@@ -1,0 +1,118 @@
+.home-container{
+  width: 100%;
+  /* border: 1px solid green; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 1900px;
+  /* padding: 0 100px; */
+  box-sizing: border-box;
+  /* font-family: 'Kanit', sans-serif; */
+}
+.home-logo-container{
+  /* position: relative; */
+  border-bottom: 2px solid gray;
+  width: 90%;
+  /* margin: 0 10px; */
+}
+.home-logo{
+  display: block;
+  margin: 0 auto;
+  max-width: 200px;
+}
+.home-add-table-btn{
+  margin-top: 20px;
+  width: 50%;
+  padding: 5px 0;
+  background-color: #44dc53;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Kanit', sans-serif;
+}
+.group-btn-text{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-add-table-form{
+  margin-top: 20px;
+  max-width: 500px;
+  width: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.home-add-table-form .input-group{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  box-sizing: border-box;
+
+}
+.home-add-table-form .input-group input, .home-add-table-form .input-group textarea{
+  flex: 7
+}
+.home-add-table-form .input-group label{
+  flex: 2
+}
+.home-add-table-form .btn-submit{
+  /* width: 100%; */
+  text-align: center;
+}
+.home-add-table-form .btn-submit button{
+  margin-top: 20px;
+  width: 200px;
+  font-size: 20px;
+  font-family: 'Kanit', sans-serif;
+  background-color: #44dc53;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  /* padding: 0 ; */
+}
+@media only screen and (max-width: 500px) {
+  .home-add-table-form .input-group{
+    flex-direction: column;
+  }
+}
+.list-table{
+  /* border: 1px solid red; */
+  width: 90%;
+  padding: 10px;
+  display: flex;
+  margin: 10px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+}
+.remove-table-dialog{
+  width: 300px;
+  height: 150px;
+  border: 1px solid red;
+  position: absolute;
+  display: none;
+  margin: 0 auto;
+}
+.dialog-animation{
+  display: block !important;
+  z-index: 10;
+  animation-name: slide-dialog;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+}
+@keyframes slide-dialog{
+  0%{
+    top: 0;
+    opacity: 0;
+  }
+  100% {
+    /* transform: translate(50%,-50%); */
+    top: 50%;
+    opacity: 1;
+  }
+}

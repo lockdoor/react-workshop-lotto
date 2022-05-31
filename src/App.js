@@ -16,7 +16,9 @@ function App() {
       <Nav />
       <Routes>
         <Route path='/'  element={<Home />}/>
-        <Route path='table'  element={<Table />}/>
+        <Route path='table'>
+          <Route path=":params" element={<Table />}/>
+        </Route>
         <Route path='customer' element={<Customer />}/>
         <Route path='dashboard' element={<Dashboard />}/>
       </Routes>

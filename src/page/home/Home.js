@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { BiBookAdd, BiBlock } from 'react-icons/bi'
+import { useSelector, useDispatch } from 'react-redux'
+import { addTable, removeTable } from '../../redux/reducer'
+import { ToastContainer, toast, Slide } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 import './Home.css'
 import FormAddTable from './component/FormAddTable'
 import ListTable from './component/ListTable'
-import { useSelector, useDispatch } from 'react-redux'
-import { addTable, removeTable } from '../../redux/reducer'
+import RemoveTableDialog from './component/RemoveTableDiaLog'
 
 
 export default function Home() {
@@ -16,7 +20,7 @@ export default function Home() {
   const [date, setDate] = useState('')
   const [showAddtable, setShowAddTable] = useState(false)
   const [showRemoveTableDialog, setShowRemoveTableDialog] = useState(false)
-
+  const [tableToRemove, setTableToRemove] = useState('')
 
   const checkWrongInput = (value) => {
     return value.trim() === '' ? true : false
@@ -56,13 +60,27 @@ export default function Home() {
     }
 
     dispatch(addTable(tableObject))
+
     setName('')
     setDesc('')
     setPrice('')
     setDate('')
     setShowAddTable(false)
+    toast.success('เพิ่มตารางเรียบร้อยแล้ว', {
+      position: "top-center",
+      transition: Slide,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored'
+      });
   }
-  const trashClickHandle = (id) => {
+  const trashClickHandle = (table) => {
+
+    setTableToRemove(table)
     setShowRemoveTableDialog(true)
     // dispatch(removeTable(id))
   }
@@ -103,13 +121,14 @@ export default function Home() {
         )
       })
       }
-      <div 
-        className={showRemoveTableDialog
-        ? 'remove-table-dialog dialog-animation'
-        : 'remove-table-dialog'
-      }>
-        this is modal
-      </div>
+      <RemoveTableDialog 
+        showRemoveTableDialog={showRemoveTableDialog}
+        setShowRemoveTableDialog={setShowRemoveTableDialog}
+        action={()=>dispatch(removeTable(tableToRemove.id))}
+        title={tableToRemove.name}
+        content="หากต้องการลบกรุณากดยืนยัน"
+        />
+      <ToastContainer />
     </div>
   )
 }

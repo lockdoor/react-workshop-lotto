@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BiBookAdd, BiBlock } from 'react-icons/bi'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTable, removeTable } from '../../redux/reducer'
@@ -21,10 +21,12 @@ export default function Home() {
   const [showAddtable, setShowAddTable] = useState(false)
   const [showRemoveTableDialog, setShowRemoveTableDialog] = useState(false)
   const [tableToRemove, setTableToRemove] = useState('')
+  const [tableBydate, setTableBydate] = useState([])
 
   const checkWrongInput = (value) => {
     return value.trim() === '' ? true : false
   }
+  
   const formSubmit = (e) => {
     e.preventDefault()
     if (checkWrongInput(name)) {
@@ -45,8 +47,8 @@ export default function Home() {
       const num = i.toString()
       numbers.push({
         num: num.length === 1 ? "0" + num : num,
-        customer: null,
-        reserve: null,
+        customer: false,
+        reserve: false,
         paid: false
       })
     }
@@ -56,7 +58,11 @@ export default function Home() {
       desc: desc,
       date: date,
       price: price,
-      numbers: numbers
+      numbers: numbers,
+      settings: {
+        tableOn: true,
+        emoji: '🍎'
+      }
     }
 
     dispatch(addTable(tableObject))
@@ -78,14 +84,21 @@ export default function Home() {
       theme: 'colored'
       });
   }
+  
   const trashClickHandle = (table) => {
 
     setTableToRemove(table)
     setShowRemoveTableDialog(true)
-    // dispatch(removeTable(id))
   }
-  // useEffect(()=>{    
-  //   console.log(state)},[state])
+  useEffect(()=>{   
+    const tables = [...state.tables]
+    // console.log(tables)
+    tables.sort((a, b) => {
+      // console.log(new Date(a.date).getTime()/1000)
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+  })
+    setTableBydate(tables)
+  },[state])
 
   return (
     <div className='home-container'>
@@ -108,19 +121,21 @@ export default function Home() {
             <BiBookAdd />
           </span>}
       </button>
+      
       {showAddtable &&
         <FormAddTable name={name} desc={desc}
           price={price} date={date} setName={setName}
           setDesc={setDesc} setPrice={setPrice}
           setDate={setDate} formSubmit={formSubmit} />
       }
-      {state.tables.length !== 0 && state.tables.map((table) => {
+
+      {state.tables.length !== 0 && tableBydate.map((table) => {
         return (
           <ListTable key={table.id} table={table} 
             trashClickHandle={trashClickHandle} />
         )
-      })
-      }
+      })}
+
       <RemoveTableDialog 
         showRemoveTableDialog={showRemoveTableDialog}
         setShowRemoveTableDialog={setShowRemoveTableDialog}

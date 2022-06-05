@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
+import * as data from './mockup.json'
+// const customers = [
+//   {
+//     id: 1,
+//     name: "ต้น"
+//   },
+//   {
+//     id: 2,
+//     name: "อร"
+//   }
+// ]
 
-const customers = [
-  {
-    id: 1,
-    name: "ต้น"
-  },
-  {
-    id: 2,
-    name: "อร"
-  }
-]
-
-const lottodata = {
-  customerId: 3,
-  tableId: 1,
-  customers: customers,
-  tables: []}
+const lottodata = data
+// {
+//   customerId: 3,
+//   tableId: 1,
+//   customers: [],
+//   tables: []}
 export const reducer = createSlice({
   name: 'reducer',
   initialState: localStorage.getItem('lottodata') 
@@ -42,14 +43,70 @@ export const reducer = createSlice({
     },
     addCustomertoNumber: (state, action) => {
       const { number, tableId, customerName } = action.payload
-      console.log(customerName)
+      // console.log(customerName)
       const tableIndex = state.tables.findIndex(table => table.id === tableId)
       const numberIndex = state.tables[tableIndex].numbers.findIndex(el => el.num === number)
       state.tables[tableIndex].numbers[numberIndex].customer = customerName
+      const today = new Date()
+      state.tables[tableIndex].numbers[numberIndex].reserve = today.toISOString()
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    removeCustomerFromNumber: (state, action) => {
+      const { number, tableId } = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      const numberIndex = state.tables[tableIndex].numbers.findIndex(el => el.num === number)
+      const numObj = {customer: false, num: number, paid: false, reserve: false}
+      state.tables[tableIndex].numbers[numberIndex] = numObj
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setPaidSingleNumber: (state, action) => {
+      const { number, tableId, isCheck } = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      const numberIndex = state.tables[tableIndex].numbers.findIndex(el => el.num === number)
+      const today = new Date()
+      state.tables[tableIndex].numbers[numberIndex].paid = 
+        isCheck ? today.toISOString() : false
+      localStorage.setItem('lottodata', JSON.stringify(state))      
+    },
+    setPaidAllNumber: (state, action) => {
+      const { customer, tableId, isCheck} = action.payload
+      // console.log(action.payload)
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      // const numberIndex = state.tables[tableIndex].numbers.findIndex(el => el.num === number)
+      const today = new Date()
+      state.tables[tableIndex].numbers.forEach((num, i) => {
+        if(num.customer === customer){
+          state.tables[tableIndex].numbers[i].paid = 
+          isCheck ?false : today.toISOString()
+        }
+      })
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setTableStatus: (state, action) => {
+      const {tableId, status} = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      state.tables[tableIndex].settings.tableOn = status
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setTableEmoji: (state, action) => {
+      const {tableId, emoji} = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      state.tables[tableIndex].settings.emoji = emoji
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setTablePrice: (state, action) => {
+      const {tableId, price} = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      state.tables[tableIndex].price = price
       localStorage.setItem('lottodata', JSON.stringify(state))
     }
+
   }
 })
 
 export default reducer.reducer
-export const {addTable, removeTable, addCustomer, addCustomertoNumber} = reducer.actions
+export const {addTable, removeTable, addCustomer, 
+  addCustomertoNumber, removeCustomerFromNumber,
+  setPaidSingleNumber, setPaidAllNumber, setTableStatus,
+  setTableEmoji, setTablePrice
+} = reducer.actions

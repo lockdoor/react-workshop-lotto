@@ -7,7 +7,20 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addCustomer, addCustomertoNumber } from "../../../redux/reducer";
+import { addCustomer, addCustomertoNumber, removeCustomerFromNumber } from "../../../redux/reducer";
+import { ToastContainer, toast, Slide } from 'react-toastify'
+
+const toastProp = {
+  position: "top-center",
+      transition: Slide,
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored'
+}
 
 const style = {
   position: 'absolute',
@@ -29,36 +42,52 @@ export default function ModalAssignCustomer({
   const dispatch = useDispatch()
   const [value, setValue] = useState(null)  
   const addCustomerBtnHandle = () => {
-    console.log(value) 
+    // console.log(value) 
+    let customerName
     if(value === null){
       alert('ห้ามว่าง')
       return
     }
     else if(value.hasOwnProperty('id')){
       // console.log(value, 'มีชื่ออยู่แล้วทำการกดเลือกจากฟิล')
-      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: value.name}))
+      customerName = value.name
+      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
     }else if(value.hasOwnProperty('inputValue')){
       // console.log(value, 'ทำการสร้างชื่อใหม่โดยกดเลือกฟิล')
+      customerName = value.inputValue
       dispatch(addCustomer(value.inputValue)) 
-      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: value.inputValue}))
+      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
     }else{
       const isExisting = customers.some(customer => customer.name === value)
       if(isExisting){
         // console.log('มีชื่ออยู่แล้ว แต่ไม่ได้กดเลือกจากฟิล')
-        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: value}))
+        customerName = value
+        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
       }else{
         // console.log('สร้างลูกค้าใหม่ โดยไม่ได้กดเลือกจากฟิล')
+        customerName = value
         dispatch(addCustomer(value))
-        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: value.value}))
+        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
       }
     }    
     setValue('')
     onClose()
+    toast.success(`ลูกค้า ${customerName} ได้ทำการจองเลข ${number.num}`, {
+      ...toastProp
+      })
   }
   // console.log(number)
+  const removeCustomerFromNumberBtnHandle = (num) => {
+    dispatch(removeCustomerFromNumber({number: num, tableId: tableId}))
+    onClose()
+    toast.error(`ยกเลิกการจองเลข ${number.num}`, {
+      ...toastProp
+      })
+  }
 
   return (
-    <Modal
+    <div>
+      <Modal
       open={open}
       onClose={onClose}
       aria-labelledby="modal-modal-title"
@@ -79,20 +108,20 @@ export default function ModalAssignCustomer({
           value={value}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
-              console.log('ไม่ได้เลือกจากฟิล ซึ่งอาจจะทำให้ชื่อซ้ำกันได้')
+              // console.log('ไม่ได้เลือกจากฟิล ซึ่งอาจจะทำให้ชื่อซ้ำกันได้')
               // setValue({
               //   name: newValue,
               // });
               setValue(newValue);              
             } else if (newValue && newValue.inputValue) {
               // Create a new value from the user input
-              console.log('สร้างลูกค้าใหม่')
+              // console.log('สร้างลูกค้าใหม่')
               // setValue({
               //   name: newValue.inputValue,
               // });
               setValue(newValue)
             } else {
-              console.log('มีลูกค้าแล้ว')
+              // console.log('มีลูกค้าแล้ว')
               setValue(newValue);
             }
           }}
@@ -135,15 +164,29 @@ export default function ModalAssignCustomer({
             <TextField {...params} label="Free solo with text demo" />
           )}
         />
-        <Stack style={{ marginTop: 30 }}>
-          <Button variant="contained"
-            onClick={addCustomerBtnHandle}
-            // sx={{ }}
-            size="large"
-          >เพิ่มลูกค้า</Button>
-        </Stack>
+        { number.customer 
+          ?<Stack direction="row" spacing={2} 
+            justifyContent="center" paddingTop={2}>
+            <Button variant="contained" color="secondary"
+              onClick={addCustomerBtnHandle}
+            >แก้ไขรายชื่อ</Button>
+            <Button variant="contained" color="error"
+              onClick={()=>removeCustomerFromNumberBtnHandle(number.num)}
+            >ยกเลิกลูกค้า</Button>
+          </Stack>        
+          :<Stack style={{ marginTop: 30 }}>
+            <Button variant="contained"
+              onClick={addCustomerBtnHandle}
+              // sx={{ }}
+              size="large"
+            >เพิ่มลูกค้า</Button>
+          </Stack>
+        }
 
       </Box>
     </Modal>
+    <ToastContainer />
+    </div>
+    
   )
 }

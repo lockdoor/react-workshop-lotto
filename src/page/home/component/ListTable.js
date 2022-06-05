@@ -6,15 +6,38 @@ export default function ListTable({table, trashClickHandle}){
   const date = new Date(table.date)
   const dateString = date.toLocaleDateString('th-TH', options)
   const [hovered, setHovered] = useState(false)
+  const tableOnBgColor = '#1f8eba'
+  const tableOffBgColor = '#eeeeee'
+  const tableOnText = 'white'
+  const tableOffText = '#ddd'
   return(
-    <div className="list-table">
-      <span style={hovered ? hover : normal}
-        onMouseEnter={()=>setHovered(true)}
-        onMouseLeave={()=>setHovered(false)}
-      ><Link to={`table/${table.id}-${table.name}`}>{table.name}</Link></span>
-      <span style={{flex:3, ...overflowText}}>{dateString}</span>
-      <span style={{flex:1, color:'red', cursor: 'pointer', textAlign: 'end'}}
-        onClick={()=>trashClickHandle(table)}><BsTrash /></span>
+    <div className="list-table"
+      style={{
+        backgroundColor: table.settings.tableOn ? tableOnBgColor : tableOffBgColor,
+        color: table.settings.tableOn ? tableOnText : tableOffText,
+      }}
+    > 
+        <Link to={`table/${table.id}-${table.name}`}
+          onMouseEnter={()=>setHovered(true)}
+          onMouseLeave={()=>setHovered(false)}
+          style={{
+            flex: 7,
+            ...overflowText,
+            fontSize: hovered ? '1.2em' : 16,
+            cursor: 'pointer',
+            textDecoration: 'none',
+            color: table.settings.tableOn ? tableOnText : tableOffText,
+          }}
+        >{table.name}</Link>
+      <span style={{flex:3, ...overflowText, cursor: 'default'}}>{dateString}</span>
+      <span style={{
+          flex:1, 
+          color: table.settings.tableOn ? tableOnText : tableOffText, 
+          cursor: 'pointer', 
+          textAlign: 'end'}}
+        onClick={()=>trashClickHandle(table)}>
+          <BsTrash />
+        </span>
     </div>
   )
 }
@@ -23,13 +46,13 @@ const overflowText ={
   textOverflow: 'ellipsis', whiteSpace: 'nowrap',
   paddingRight: 10
 }
-const normal = {
-    flex: 7,
-    ...overflowText,
-    cursor: "pointer"
-  }
-const hover = {
-    ...normal,
-    color: '#1f8eba',
-    fontSize: '1.2em'
-  }
+// const normal = {
+//     flex: 7,
+//     ...overflowText,
+//     cursor: "pointer"
+//   }
+// const hover = {
+//     ...normal,
+//     color: '#1f8eba',
+//     fontSize: '1.2em'
+//   }

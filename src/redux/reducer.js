@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import * as data from './mockup.json'
+// import * as data from './mockup.json'
 // const customers = [
 //   {
 //     id: 1,
@@ -11,12 +11,13 @@ import * as data from './mockup.json'
 //   }
 // ]
 
-const lottodata = data
-// {
-//   customerId: 3,
-//   tableId: 1,
-//   customers: [],
-//   tables: []}
+const lottodata = 
+// data
+{
+  customerId: 1,
+  tableId: 1,
+  customers: [],
+  tables: []}
 export const reducer = createSlice({
   name: 'reducer',
   initialState: localStorage.getItem('lottodata') 

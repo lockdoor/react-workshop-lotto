@@ -11,7 +11,7 @@ export default function Nav(){
           <Link to="customers">ลูกค้า</Link>
         </li>
         <li>
-          <Link to="dashboard">รายงาน</Link>
+          <Link to="tables">ตาราง</Link>
         </li>
       </ul>
     </nav>    

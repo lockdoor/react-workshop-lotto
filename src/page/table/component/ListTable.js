@@ -17,7 +17,7 @@ export default function ListTable({table, trashClickHandle}){
         color: table.settings.tableOn ? tableOnText : tableOffText,
       }}
     > 
-        <Link to={`table/${table.id}-${table.name.replace(" ", "")}`}
+        <Link to={`${table.id}-${table.name.replace(" ", "")}`}
           onMouseEnter={()=>setHovered(true)}
           onMouseLeave={()=>setHovered(false)}
           style={{

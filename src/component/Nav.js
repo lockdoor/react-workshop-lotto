@@ -8,7 +8,7 @@ export default function Nav(){
           <Link to="/">หน้าหลัก</Link>
         </li>
         <li>
-          <Link to="customer">ลูกค้า</Link>
+          <Link to="customers">ลูกค้า</Link>
         </li>
         <li>
           <Link to="dashboard">รายงาน</Link>

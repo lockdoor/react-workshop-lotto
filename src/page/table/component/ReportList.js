@@ -1,6 +1,7 @@
 import { AiOutlineCheckCircle, AiOutlineMinusCircle} from 'react-icons/ai'
 // import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { setPaidSingleNumber, setPaidAllNumber } from '../../../redux/reducer'
 import { ToastContainer, toast, Slide } from 'react-toastify'
 
@@ -19,6 +20,7 @@ const toastProp = {
 export default function ReportList({table}){
 
   // const [hovered, setHovered] = useState(false)
+  const {customers} = useSelector((state) => state.reducer)
   const dispatch = useDispatch()
   
 
@@ -58,14 +60,19 @@ export default function ReportList({table}){
     return !numbers.some(number => number.paid === false )
   }
   
-  let customers = table.numbers.filter(number => number.customer !== false)
+  let customersArr = table.numbers.filter(number => number.customer !== false)
     .map(number=>number.customer)
-  customers = [...new Set(customers)]
-  customers = customers.map(customer => {
+  customersArr = [...new Set(customersArr)]
+  customersArr = customersArr.map(customer => {
     const nums = table.numbers.filter(number => number.customer === customer)    
     // console.log(nums)
     return {name: customer, nums: nums}
   })
+
+  let findCustomerId = (customerName) => {
+    const customer = customers.find(customer => customer.name === customerName)
+    return customer.id
+  }
 
   
   return(
@@ -78,16 +85,17 @@ export default function ReportList({table}){
         display: 'flex',
         flexDirection: 'column'
     }}>
-      {customers.map(customer => (
+      {customersArr.map(customer => (
         <li key={customer.name} 
           className="list-table"
         >
           {/* name */}
-          <span style={{
-            flex: 2,
-            ...overflowText,
-            cursor: table.settings.tableOn ? "pointer" : "default"
-            }}>{customer.name}</span>
+          <Link to={`../../customers/${findCustomerId(customer.name)}-${customer.name}`}
+            style={{
+              flex: 2,
+              ...overflowText,
+              cursor: table.settings.tableOn ? "pointer" : "default"
+          }}>{customer.name}</Link>
           
           {/* number */}
           <span style={{

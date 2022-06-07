@@ -17,7 +17,7 @@ export default function ListTable({table, trashClickHandle}){
         color: table.settings.tableOn ? tableOnText : tableOffText,
       }}
     > 
-        <Link to={`table/${table.id}-${table.name}`}
+        <Link to={`table/${table.id}-${table.name.replace(" ", "")}`}
           onMouseEnter={()=>setHovered(true)}
           onMouseLeave={()=>setHovered(false)}
           style={{
@@ -46,13 +46,4 @@ const overflowText ={
   textOverflow: 'ellipsis', whiteSpace: 'nowrap',
   paddingRight: 10
 }
-// const normal = {
-//     flex: 7,
-//     ...overflowText,
-//     cursor: "pointer"
-//   }
-// const hover = {
-//     ...normal,
-//     color: '#1f8eba',
-//     fontSize: '1.2em'
-//   }
+

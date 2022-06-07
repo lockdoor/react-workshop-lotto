@@ -13,7 +13,8 @@ import ListItemText from '@mui/material/ListItemText';
 // import MailIcon from '@mui/icons-material/Mail';
 import Switch from '@mui/material/Switch'
 import { ToastContainer, toast, Slide } from 'react-toastify'
-import { setTableStatus, setTableEmoji, setTablePrice } from '../../../redux/reducer';
+import { setTableStatus, setTableEmoji, setTablePrice, 
+  setTableName, setTableDate } from '../../../redux/reducer';
 import { useDispatch } from 'react-redux';
 import Picker from 'emoji-picker-react'
 import '../Table.css'
@@ -35,6 +36,8 @@ export default function DrowerSetting({ open, close, table }) {
   // const [chosenEmoji, setChosenEmoji] = React.useState(null)
   const [showEmojiPicker, setShowEmojiPicker] = React.useState(false)
   const [price, setPrice] = React.useState(0)
+  const [name, setName] = React.useState('')
+  const [date, setDate] = React.useState('')
   const dispatch = useDispatch()
   
   
@@ -67,10 +70,26 @@ export default function DrowerSetting({ open, close, table }) {
     // console.log(emojiObject)
   }
 
+  const inputTableNameChangeHandle = (e) => {
+    setName(e.target.value)
+  }
+  const inputTableNameBlurHandle = (e) => {
+    // setPrice(e.target.value)    
+    if(table.name === name.trim()){
+      console.log('ไม่อัพเดต')      
+    }else{
+      console.log('อัพเดต')
+      dispatch(setTableName({tableId: table.id, tableName: name.trim()}))
+      toast.success(`ตั้งค่าชื่อตารางสำเร็จแล้ว`, {
+        ...toastProp
+      })
+    }
+  }
+
   const inputTablePriceChangeHandle = (e) => {
     setPrice(e.target.value)
   }
-  const InputTablePriceBlurHandle = (e) => {
+  const inputTablePriceBlurHandle = (e) => {
     // setPrice(e.target.value)    
     if(table.price === price){
       console.log('ไม่อัพเดต')      
@@ -83,9 +102,27 @@ export default function DrowerSetting({ open, close, table }) {
     }
   }
 
+  const inputTableDateChangeHandle = (e) => {
+    setDate(e.target.value)
+  }
+  const inputTableDateBlurHandle = (e) => {
+    // setPrice(e.target.value)    
+    if(table.date === date){
+      console.log('ไม่อัพเดต')      
+    }else{
+      console.log('อัพเดต')
+      dispatch(setTableDate({tableId: table.id, tableDate: date}))
+      toast.success(`ตั้งค่าวันที่สำเร็จแล้ว`, {
+        ...toastProp
+      })
+    }
+  }
+
   React.useEffect(() => {
     setTableStatusSwitch(table.settings.tableOn)
     setPrice(table.price)
+    setName(table.name)
+    setDate(table.date)
   }, [table])
 
   const list = () => (
@@ -96,6 +133,20 @@ export default function DrowerSetting({ open, close, table }) {
     // onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
+        <ListItem >
+          <ListItemText>ชื่อตาราง</ListItemText>
+          <input type="text" 
+            value={name} 
+            onBlur={inputTableNameBlurHandle}
+            onChange={inputTableNameChangeHandle}
+            className="table-drawer-input-price"
+            style={{
+              border: 'none',
+              textAlign: 'end'
+            }}
+          />
+        </ListItem>
+        
         <ListItem>
           <ListItemText>เปิดใช้งาน</ListItemText>
           <Switch checked={tableStatusSwitch} onChange={switchTableStatus} />
@@ -114,8 +165,21 @@ export default function DrowerSetting({ open, close, table }) {
           <ListItemText>ตั้งค่าราคา</ListItemText>
           <input type="number" 
             value={price} 
-            onBlur={InputTablePriceBlurHandle}
+            onBlur={inputTablePriceBlurHandle}
             onChange={inputTablePriceChangeHandle}
+            className="table-drawer-input-price"
+            style={{
+              border: 'none',
+              textAlign: 'end'
+            }}
+          />
+        </ListItem>
+        <ListItem >
+          <ListItemText>ตั้งค่าวันที่</ListItemText>
+          <input type="date" 
+            value={date} 
+            onBlur={inputTableDateBlurHandle}
+            onChange={inputTableDateChangeHandle}
             className="table-drawer-input-price"
             style={{
               border: 'none',

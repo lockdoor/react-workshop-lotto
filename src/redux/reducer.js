@@ -99,6 +99,18 @@ export const reducer = createSlice({
       const tableIndex = state.tables.findIndex(table => table.id === tableId)
       state.tables[tableIndex].price = price
       localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setTableName: (state, action) => {
+      const {tableId, tableName} = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      state.tables[tableIndex].name = tableName
+      localStorage.setItem('lottodata', JSON.stringify(state))
+    },
+    setTableDate: (state, action) => {
+      const {tableId, tableDate} = action.payload
+      const tableIndex = state.tables.findIndex(table => table.id === tableId)
+      state.tables[tableIndex].date = tableDate
+      localStorage.setItem('lottodata', JSON.stringify(state))
     }
 
   }
@@ -108,5 +120,5 @@ export default reducer.reducer
 export const {addTable, removeTable, addCustomer, 
   addCustomertoNumber, removeCustomerFromNumber,
   setPaidSingleNumber, setPaidAllNumber, setTableStatus,
-  setTableEmoji, setTablePrice
+  setTableEmoji, setTablePrice, setTableName, setTableDate
 } = reducer.actions

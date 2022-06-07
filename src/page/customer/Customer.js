@@ -46,6 +46,9 @@ export default function Customer(){
       thisTable.unPaid = unPaid
       return thisTable
     })
+    arr.sort((a,b)=>{
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    })
     // console.log(arr)
     setTableOfCustomer(arr)
     // console.log(tableOfCustomer)

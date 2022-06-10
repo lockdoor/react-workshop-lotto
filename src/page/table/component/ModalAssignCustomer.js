@@ -56,7 +56,7 @@ export default function ModalAssignCustomer({
     }
     else if(value.hasOwnProperty('id')){
       console.log(value, 'มีชื่ออยู่แล้วทำการกดเลือกจากฟิล')
-      // customerName = value.name
+      customerName = value.name
       // dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
       dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerId: value.id}))
     }else if(value.hasOwnProperty('inputValue')){
@@ -72,6 +72,7 @@ export default function ModalAssignCustomer({
         // console.log(value, 'มีชื่ออยู่แล้ว แต่ไม่ได้กดเลือกจากฟิล')
         const id = findCustomerId(value)
         // console.log(customerId)
+        customerName = value
         dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerId: id}))
       }else{
         // console.log('สร้างลูกค้าใหม่ โดยไม่ได้กดเลือกจากฟิล')

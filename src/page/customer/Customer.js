@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import ModalChangeText from "../../component/ModalChangeText"
 
 export default function Customer(){
   const { tables } = useSelector((state) => state.reducer)
@@ -9,7 +10,7 @@ export default function Customer(){
   const customerName = params.split("-")[1]
   // console.log(customerName)
   const [tableOfCustomer , setTableOfCustomer] = useState([])
-
+  const [showModalChangeText, setShowModalChangeText] = useState(false)
   /*
     ต้องการแสดงรายละเอียดของลูกค้า
     - แต่ละตาราง เรียงตามจำนวนเงินที่ยังไม่ได้จ่าย    
@@ -63,7 +64,16 @@ export default function Customer(){
       alignItems: 'center'
     }}>
       {/* <h1>{params}</h1> */}
-      <h2>{customerName}</h2>
+
+      <ModalChangeText 
+        onOpen={showModalChangeText}
+        onClose={()=>setShowModalChangeText(false)}
+        header="เปลี่ยนชื่อลูกค้า"
+        content={customerName}
+        onSave={(text)=>console.log(text)}
+      />
+      <h2 onClick={()=>setShowModalChangeText(true)}
+        style={{cursor: 'pointer'}}>{customerName} </h2>
       <div>ยอดค้างจ่าย {totalUnPaid()}</div>
       <div style={{width: '100%'}}>
         {tableOfCustomer.map(table => {

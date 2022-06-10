@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 // import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -14,10 +14,11 @@ import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch'
 import { ToastContainer, toast, Slide } from 'react-toastify'
 import { setTableStatus, setTableEmoji, setTablePrice, 
-  setTableName, setTableDate } from '../../../redux/reducer';
+  setTableName, setTableDate, setTableDesc } from '../../../redux/reducer';
 import { useDispatch } from 'react-redux';
 import Picker from 'emoji-picker-react'
 import '../Table.css'
+import ModalChangeText from '../../../component/ModalChangeText'
 
 const toastProp = {
   position: "top-center",
@@ -38,6 +39,8 @@ export default function DrowerSetting({ open, close, table }) {
   const [price, setPrice] = React.useState(0)
   const [name, setName] = React.useState('')
   const [date, setDate] = React.useState('')
+  const [desc, setDesc] = React.useState('')
+  const [showModalChangeText, setShowModalChangeText] = React.useState(false)
   const dispatch = useDispatch()
   
   
@@ -118,11 +121,14 @@ export default function DrowerSetting({ open, close, table }) {
     }
   }
 
+  
+
   React.useEffect(() => {
     setTableStatusSwitch(table.settings.tableOn)
     setPrice(table.price)
     setName(table.name)
     setDate(table.date)
+    setDesc(table.desc)
   }, [table])
 
   const list = () => (
@@ -187,6 +193,11 @@ export default function DrowerSetting({ open, close, table }) {
             }}
           />
         </ListItem>
+          
+        <ListItem>
+          <ListItemText>รายละเอียด</ListItemText>
+          <Button onClick={()=>{setShowModalChangeText(true)}}>ตั้งค่า</Button>
+        </ListItem>
       </List>
     </Box>
   );
@@ -203,6 +214,13 @@ export default function DrowerSetting({ open, close, table }) {
         {list()}
       </Drawer>
       <ToastContainer />
+      <ModalChangeText 
+        onOpen={showModalChangeText} 
+        onClose={()=>{setShowModalChangeText(false)}}
+        header={"ตั้งค่ารายละเอียด"}
+        content={desc}
+        onSave={(text)=>dispatch(setTableDesc({tableId: table.id, tableDesc: text}))}
+      />
 
     </div>
   );

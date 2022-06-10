@@ -61,6 +61,7 @@ export default function Home(){
         />
       </div>
       <h2>{table.name}</h2>
+      <p>งวดวันที่ {new Date(table.date).toLocaleDateString('th-TH', {day: '2-digit', month: 'long', year: 'numeric'}) }</p>
       <p>{table.desc}</p>
       <div
         // ref={tableRef}

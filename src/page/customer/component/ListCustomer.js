@@ -92,7 +92,9 @@ export default function ListCustomer({customerArr}){
         >
           <Link to={`./${customer.customer.id}-${customer.customer.name.replace(" ", "")}`} style={{
             flex: 2,
-            padding: '0 5px'
+            padding: '0 5px',
+            textDecoration: 'none',
+            color: 'white'
           }}>{customer.customer.name}</Link>
           
           <div style={{

@@ -81,10 +81,12 @@ export default function Customer(){
                 padding: '20px 10px'
               }}
             >
-              <Link to={`../../table/${table.id}-${table.name.replace(" ", "")}`}
+              <Link to={`../../tables/${table.id}-${table.name.replace(" ", "")}`}
                 style={{
                   flex: 1,
-                  padding: '0 5px'
+                  padding: '0 5px',
+                  textDecoration: 'none',
+                  color: 'white'
               }}>{table.name}</Link>
               
               <div style={{

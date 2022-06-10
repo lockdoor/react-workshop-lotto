@@ -94,7 +94,9 @@ export default function ReportList({table}){
             style={{
               flex: 2,
               ...overflowText,
-              cursor: table.settings.tableOn ? "pointer" : "default"
+              cursor: table.settings.tableOn ? "pointer" : "default",
+              color: 'orange',
+              textDecoration: 'none'
           }}>{customer.name}</Link>
           
           {/* number */}

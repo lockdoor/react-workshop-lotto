@@ -51,11 +51,12 @@ export default function Home(){
         position: 'fixed',
         top: 0,
         margin: '10px 0',
-        transform: 'translateX(800%)'
+        transform: 'translateX(800%)',
+        zIndex: 10
       }}><BsGear size={24}
             onClick={() => setOpenDrawer(!openDrawer)}
             style={{
-              cursor: 'pointer'
+              cursor: 'pointer'             
             }}
         />
       </div>

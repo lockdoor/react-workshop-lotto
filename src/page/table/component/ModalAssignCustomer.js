@@ -43,6 +43,10 @@ export default function ModalAssignCustomer({
   const dispatch = useDispatch()
   const [value, setValue] = useState(null)  
 
+  const findCustomerName = (customerId) => {
+    const customer =  customers.find(customer => customer.id === customerId)
+    return customer.name
+  }
   const findCustomerId = (customerName) => {
       const customer = customers.find(customer => customer.name === customerName)
       return customer.id
@@ -112,7 +116,7 @@ export default function ModalAssignCustomer({
         {
           number.customer && 
           <Typography id="modal-modal-description" align="center" sx={{ mt: 2 }}>          
-            {number.customer}
+            { findCustomerName(number.customer) }
           </Typography>
         }
         <Autocomplete
@@ -172,7 +176,7 @@ export default function ModalAssignCustomer({
           sx={{ width: '100%' }}
           freeSolo
           renderInput={(params) => (
-            <TextField {...params} label="Free solo with text demo" />
+            <TextField {...params} label="ป้อนชื่อลูกค้า" />
           )}
         />
         { number.customer 

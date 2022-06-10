@@ -44,7 +44,7 @@ export default function ReportList({table}){
     // console.log(customer)
     const isCheck = isAllPaid(customer.nums)
     dispatch(setPaidAllNumber({
-      customer: customer.name,
+      customer: customer.id,
       tableId: table.id,
       isCheck: isCheck
     }))
@@ -96,7 +96,7 @@ export default function ReportList({table}){
         flexDirection: 'column'
     }}>
       {customersArr.map(customer => {
-        // console.log(customer)
+        console.log(customer)
         return (
         <li key={customer.id} 
           className="list-table"          

@@ -6,7 +6,7 @@ import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCustomer, addCustomertoNumber, removeCustomerFromNumber } from "../../../redux/reducer";
 import { ToastContainer, toast, Slide } from 'react-toastify'
 
@@ -39,8 +39,14 @@ const filter = createFilterOptions();
 export default function ModalAssignCustomer({
   open, onClose, customers, number, tableId
 }) {
+  const {customerId} = useSelector((state) => state.reducer)
   const dispatch = useDispatch()
   const [value, setValue] = useState(null)  
+
+  const findCustomerId = (customerName) => {
+      const customer = customers.find(customer => customer.name === customerName)
+      return customer.id
+    }
   const addCustomerBtnHandle = () => {
     // console.log(value) 
     let customerName
@@ -49,25 +55,29 @@ export default function ModalAssignCustomer({
       return
     }
     else if(value.hasOwnProperty('id')){
-      // console.log(value, 'มีชื่ออยู่แล้วทำการกดเลือกจากฟิล')
-      customerName = value.name
-      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+      console.log(value, 'มีชื่ออยู่แล้วทำการกดเลือกจากฟิล')
+      // customerName = value.name
+      // dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerId: value.id}))
     }else if(value.hasOwnProperty('inputValue')){
-      // console.log(value, 'ทำการสร้างชื่อใหม่โดยกดเลือกฟิล')
+      console.log(value, 'ทำการสร้างชื่อใหม่โดยกดเลือกฟิล')
       customerName = value.inputValue
       dispatch(addCustomer(value.inputValue)) 
-      dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+      // dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+      dispatch(addCustomertoNumber({
+        number: number.num, tableId: tableId, customerId: customerId}))
     }else{
       const isExisting = customers.some(customer => customer.name === value)
       if(isExisting){
-        // console.log('มีชื่ออยู่แล้ว แต่ไม่ได้กดเลือกจากฟิล')
-        customerName = value
-        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+        // console.log(value, 'มีชื่ออยู่แล้ว แต่ไม่ได้กดเลือกจากฟิล')
+        const id = findCustomerId(value)
+        // console.log(customerId)
+        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerId: id}))
       }else{
         // console.log('สร้างลูกค้าใหม่ โดยไม่ได้กดเลือกจากฟิล')
         customerName = value
         dispatch(addCustomer(value))
-        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerName: customerName}))
+        dispatch(addCustomertoNumber({number: number.num, tableId: tableId, customerId: customerId}))
       }
     }    
     setValue('')

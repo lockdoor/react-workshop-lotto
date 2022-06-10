@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { setPaidSingleNumber, setPaidAllNumber } from '../../../redux/reducer'
 import { ToastContainer, toast, Slide } from 'react-toastify'
+// import { useEffect, useState } from 'react'
 
 const toastProp = {
   position: "top-center",
@@ -18,7 +19,7 @@ const toastProp = {
 }
 
 export default function ReportList({table}){
-
+// console.log(table)
   // const [hovered, setHovered] = useState(false)
   const {customers} = useSelector((state) => state.reducer)
   const dispatch = useDispatch()
@@ -59,20 +60,29 @@ export default function ReportList({table}){
     // console.log(numbers.some(number => number.paid != false ))
     return !numbers.some(number => number.paid === false )
   }
-  
+  const findCustomerName = (customerId) => {
+    const customer =  customers.find(customer => customer.id === customerId)
+    return customer.name
+  }
   let customersArr = table.numbers.filter(number => number.customer !== false)
     .map(number=>number.customer)
   customersArr = [...new Set(customersArr)]
+  // console.log(customersArr)
   customersArr = customersArr.map(customer => {
+    // console.log(customer)
     const nums = table.numbers.filter(number => number.customer === customer)    
     // console.log(nums)
-    return {name: customer, nums: nums}
+    // console.log(customer)
+    findCustomerName(customer)
+    return {id: customer, name: findCustomerName(customer), nums: nums}
   })
 
-  let findCustomerId = (customerName) => {
-    const customer = customers.find(customer => customer.name === customerName)
-    return customer.id
-  }
+  
+
+  // const findCustomerId = (customerName) => {
+  //   const customer = customers.find(customer => customer.name === customerName)
+  //   return customer.id
+  // }
 
   
   return(
@@ -85,12 +95,14 @@ export default function ReportList({table}){
         display: 'flex',
         flexDirection: 'column'
     }}>
-      {customersArr.map(customer => (
-        <li key={customer.name} 
-          className="list-table"
+      {customersArr.map(customer => {
+        // console.log(customer)
+        return (
+        <li key={customer.id} 
+          className="list-table"          
         >
           {/* name */}
-          <Link to={`../../customers/${findCustomerId(customer.name)}-${customer.name}`}
+          <Link to={`../../customers/${customer.id}-${customer.name}`}
             style={{
               flex: 2,
               ...overflowText,
@@ -145,7 +157,7 @@ export default function ReportList({table}){
             </span>
           </span>
         </li>
-      ))}
+      )})}
       <ToastContainer />
     </ul>    
   )

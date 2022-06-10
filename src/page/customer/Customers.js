@@ -21,7 +21,7 @@ export default function Customers(){
     const tableOn = tables.filter(table => table.settings.tableOn)
     const tableOfCustomer = tableOn.map((table) => {
       // console.log(table)  
-      const numbers = table.numbers.filter(number => number.customer === customer.name)
+      const numbers = table.numbers.filter(number => number.customer === customer.id)
       const price = table.price
       const tableName = table.name
       const tableId = table.id      

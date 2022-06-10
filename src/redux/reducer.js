@@ -43,11 +43,12 @@ export const reducer = createSlice({
       localStorage.setItem('lottodata', JSON.stringify(state))
     },
     addCustomertoNumber: (state, action) => {
-      const { number, tableId, customerName } = action.payload
+      const { number, tableId, customerId } = action.payload
+      // const { number, tableId, customerName } = action.payload
       // console.log(customerName)
       const tableIndex = state.tables.findIndex(table => table.id === tableId)
       const numberIndex = state.tables[tableIndex].numbers.findIndex(el => el.num === number)
-      state.tables[tableIndex].numbers[numberIndex].customer = customerName
+      state.tables[tableIndex].numbers[numberIndex].customer = customerId
       const today = new Date()
       state.tables[tableIndex].numbers[numberIndex].reserve = today.toISOString()
       localStorage.setItem('lottodata', JSON.stringify(state))
@@ -119,6 +120,13 @@ export const reducer = createSlice({
       state.tables[tableIndex].desc = tableDesc
       localStorage.setItem('lottodata', JSON.stringify(state))
     },
+    setCustomerName: (state, action) => {
+      const index = state.customers.findIndex(
+        customer => customer.id = action.payload.id)
+      state.customers[index].name = action.payload.name
+      localStorage.setItem('lottodata', JSON.stringify(state))
+
+    }
     
 
   }
@@ -129,5 +137,5 @@ export const {addTable, removeTable, addCustomer,
   addCustomertoNumber, removeCustomerFromNumber,
   setPaidSingleNumber, setPaidAllNumber, setTableStatus,
   setTableEmoji, setTablePrice, setTableName, setTableDate,
-  setTableDesc
+  setTableDesc, setCustomerName
 } = reducer.actions

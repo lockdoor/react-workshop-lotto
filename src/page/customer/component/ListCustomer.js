@@ -28,10 +28,7 @@ export default function ListCustomer({customerArr}){
       }
       console.log(arr)
     return arr
-    })      
-
-    
-    
+    })   
   }
 
   useEffect(()=>{
@@ -111,7 +108,7 @@ export default function ListCustomer({customerArr}){
                     borderBottom: index+1 !== customer.tableOfCustomer.length 
                       ? '1px solid white' : 'none'
                 }}>
-                  <Link to={`../../table/${table.tableId}-${table.tableName.replace(" ", "")}`} 
+                  <Link to={`../../tables/${table.tableId}-${table.tableName.replace(" ", "")}`} 
                     style={{
                       flex: 1,
                       textDecoration: 'none',

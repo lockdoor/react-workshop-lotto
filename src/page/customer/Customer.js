@@ -1,14 +1,16 @@
 import { useParams } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ModalChangeText from "../../component/ModalChangeText"
+import { setCustomerName } from "../../redux/reducer"
 
 export default function Customer(){
-  const { tables } = useSelector((state) => state.reducer)
+  const { tables, customers } = useSelector((state) => state.reducer)
+  const dispatch = useDispatch()
   const {params} = useParams()
-  const customerName = params.split("-")[1]
-  // console.log(customerName)
+  const customerId = parseInt(params.split("-")[0]) 
+  
   const [tableOfCustomer , setTableOfCustomer] = useState([])
   const [showModalChangeText, setShowModalChangeText] = useState(false)
   /*
@@ -29,15 +31,26 @@ export default function Customer(){
     })
     return unPaid
   }
+
+  
+
+  const findCustomerName = (customerId) => {
+    const customer =  customers.find(customer => customer.id === customerId)
+    return customer.name
+  }
   
   useEffect(()=>{
     const arr = tables.filter((table)=>{
-      const tableHasCustomer = table.numbers.filter(number => number.customer === customerName)
+      // console.log(table)
+      const tableHasCustomer = table.numbers.filter(number => number.customer === customerId)
+      // console.log(tableHasCustomer)
       return tableHasCustomer.length === 0 ? false : true
     }).map(table => {
-      const numbers = table.numbers.filter((number)=> number.reserve && number.customer === customerName) 
+      
+      const numbers = table.numbers.filter((number)=> number.reserve && number.customer === customerId) 
+      // console.log(numbers)
       let unPaid = 0
-      table.numbers.forEach(number => {
+      numbers.forEach(number => {
         if(number.reserve && !number.paid){
           unPaid += parseInt(table.price)
         }
@@ -53,7 +66,7 @@ export default function Customer(){
     // console.log(arr)
     setTableOfCustomer(arr)
     // console.log(tableOfCustomer)
-  }, [tables, customerName])
+  }, [tables, customerId])
   
 
   return (
@@ -69,11 +82,11 @@ export default function Customer(){
         onOpen={showModalChangeText}
         onClose={()=>setShowModalChangeText(false)}
         header="เปลี่ยนชื่อลูกค้า"
-        content={customerName}
-        onSave={(text)=>console.log(text)}
+        content={findCustomerName(customerId)}
+        onSave={(text)=>dispatch(setCustomerName({id: customerId, name: text}))}
       />
       <h2 onClick={()=>setShowModalChangeText(true)}
-        style={{cursor: 'pointer'}}>{customerName} </h2>
+        style={{cursor: 'pointer'}}>{findCustomerName(customerId)} </h2>
       <div>ยอดค้างจ่าย {totalUnPaid()}</div>
       <div style={{width: '100%'}}>
         {tableOfCustomer.map(table => {
